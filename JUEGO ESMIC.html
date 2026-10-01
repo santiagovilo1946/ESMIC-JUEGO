@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ESMIC Pav-Safe 3D · Modo Misiones</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#0d151b;font-family:Arial,Helvetica,sans-serif;color:#fff}button{font:inherit}.screen{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(5,11,16,.55),rgba(5,11,16,.88));backdrop-filter:blur(5px)}.menu{width:min(1100px,94vw);max-height:92vh;overflow:auto;background:rgba(8,14,19,.93);border:1px solid rgba(255,255,255,.14);border-radius:22px;padding:28px;box-shadow:0 25px 70px rgba(0,0,0,.55)}.brand{font-size:13px;letter-spacing:2px;color:#8ee8b0;font-weight:800}.menu h1{font-size:38px;margin:7px 0}.menu p{color:#bdc8cf;max-width:760px;line-height:1.5}.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}.level{min-height:150px;text-align:left;border:1px solid rgba(255,255,255,.13);border-radius:15px;background:#111c23;color:#fff;padding:16px;cursor:pointer;transition:.18s}.level:hover{transform:translateY(-2px);border-color:#79d9a0;background:#14232b}.level .n{font-size:12px;color:#8ee8b0;font-weight:800}.level h3{margin:8px 0 5px;font-size:17px}.level small{color:#aebbc2;line-height:1.4}.tips{margin-top:18px;color:#9eacb4;font-size:12px}.hidden{display:none!important}#game{position:fixed;inset:0}canvas{display:block;width:100%;height:100%;outline:none}.heldkit{position:absolute;right:42px;bottom:62px;width:150px;height:115px;display:none;pointer-events:none;filter:drop-shadow(0 10px 12px rgba(0,0,0,.45))}.heldkit .box{position:absolute;right:18px;bottom:12px;width:92px;height:48px;border-radius:8px;background:linear-gradient(135deg,#e2b735,#b27d18);border:3px solid #72520f;transform:rotate(-9deg)}.heldkit .handle{position:absolute;right:52px;bottom:52px;width:35px;height:10px;border:4px solid #697077;border-bottom:0;border-radius:10px 10px 0 0;transform:rotate(-9deg)}.heldkit .label{position:absolute;right:30px;bottom:28px;font-size:11px;font-weight:900;color:#172018;transform:rotate(-9deg)}#hud{position:fixed;inset:0;pointer-events:none;z-index:5}.panel{position:absolute;background:rgba(7,13,18,.76);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px 13px}.top{left:16px;top:16px}.top b{display:block;font-size:16px}.top span{font-size:11px;color:#c6d0d6}.stats{right:16px;top:16px;text-align:right;font-size:12px}.stats strong{font-size:18px}.objective{left:50%;top:16px;transform:translateX(-50%);text-align:center;min-width:280px}.objective b{font-size:14px}.bar{height:7px;background:#26343c;border-radius:99px;overflow:hidden;margin-top:7px}.fill{height:100%;width:0;background:#78dda0;transition:width .1s}.center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;text-shadow:0 2px 8px #000;font-weight:700;font-size:20px}.cross{position:absolute;left:50%;top:50%;width:8px;height:8px;border:1px solid #fff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 4px #000}.bottom{left:16px;bottom:16px;font-size:11px;color:#d5dde1}.modal{width:min(620px,92vw);background:rgba(7,13,18,.96);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:25px;box-shadow:0 20px 70px #000}.modal h2{margin:0 0 8px;font-size:28px}.modal p{color:#bdc8cf;line-height:1.55}.consequence{background:#131f26;border-left:4px solid #ff6b5f;padding:12px 14px;border-radius:8px;margin:15px 0;color:#e6edf0}.improve{background:#13231b;border-left:4px solid #72e0a0;padding:12px 14px;border-radius:8px;color:#dcefe4}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}.actions button,.play{border:0;border-radius:10px;padding:11px 16px;cursor:pointer;font-weight:800}.primary{background:#78dda0;color:#082014}.secondary{background:#25333b;color:#fff}.danger{background:#6f2926;color:#fff}.inventory{left:16px;top:104px;min-width:220px}.inventory b{font-size:12px}.inventory .item{color:#9ee8b6;margin-top:5px}.prompt{left:50%;bottom:82px;transform:translateX(-50%);padding:9px 14px;text-align:center}.repairbar{height:8px;width:240px;background:#25343b;border-radius:99px;overflow:hidden;margin-top:7px}.repairfill{height:100%;width:0;background:#f1c75b;transition:width .05s}.repairtimer{font-size:13px;font-weight:800;margin-top:4px;color:#ffe18a}
+@media(max-width:850px){.levels{grid-template-columns:repeat(2,1fr)}.menu h1{font-size:30px}}@media(max-width:520px){.levels{grid-template-columns:1fr}.objective{min-width:220px}.bottom{font-size:10px}}
+</style>
+</head>
+<body>
+<div id="menu" class="screen"><div class="menu"><div class="brand">ESMIC · PROYECTO PAV-SAFE</div><h1>🚧 Misión: Guardia Occidental</h1><p>Juego educativo en primera persona. En cada misión debes cumplir un objetivo durante unos segundos mientras enfrentas una condición específica del pavimento. Si ocurre una caída, el juego explica la consecuencia simulada y qué aspecto de la vía debe mejorarse.</p><div class="levels" id="levels"></div><div class="tips">Controles: WASD / flechas para caminar · Shift para correr · Mouse para mirar · ESC libera el mouse. Haz clic en JUGAR para entrar al escenario.</div></div></div>
+<div id="game" class="hidden"><canvas id="view"></canvas><div id="hud"><div class="panel top"><b id="levelTitle">ESMIC PAV-SAFE</b><span id="levelSub">Misión</span></div><div class="panel stats"><strong id="repairCount">0 / 0</strong><br>reparados · <span id="score">0</span> pts</div><div class="panel inventory"><b>🎒 INVENTARIO <span style="font-size:10px;color:#8ee8b0">[I]</span></b><div id="inventoryList" class="item">Vacío</div><div id="equipText" style="font-size:10px;color:#aebbc2;margin-top:4px">1 · Equipar kit</div></div><div id="prompt" class="panel prompt hidden"></div><div class="panel objective"><b id="objective">Objetivo</b><div class="bar"><div id="fill" class="fill"></div></div></div><div id="center" class="center"></div><div class="cross"></div><div id="heldKit" class="heldkit"><div class="handle"></div><div class="box"></div><div class="label">KIT</div></div><div class="panel bottom">WASD / ↑↓←→ caminar · SHIFT correr · ESPACIO saltar · E interactuar · 1 equipar · I inventario · F reparar · Mouse mirar · ESC liberar</div></div></div>
+<div id="result" class="screen hidden"><div class="modal"><div id="resultIcon" style="font-size:40px">⚠️</div><h2 id="resultTitle">Caída simulada</h2><p id="resultIntro"></p><div class="consequence"><b>Consecuencia en el escenario</b><br><span id="consequence"></span></div><div class="improve"><b>¿Qué debe mejorarse?</b><br><span id="improvement"></span></div><div class="actions"><button id="retry" class="primary">↻ Reiniciar nivel</button><button id="choose" class="secondary">☰ Cambiar de nivel</button></div></div></div>
+<script type="module">
+(async()=>{
+const THREE=await import('https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js');
+const canvas=document.getElementById('view'),renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.35));renderer.shadowMap.enabled=false;renderer.outputColorSpace=THREE.SRGBColorSpace;
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x8fc2e5);scene.fog=new THREE.Fog(0x8fc2e5,52,125);
+const camera=new THREE.PerspectiveCamera(76,1,.05,180);camera.position.set(0,1.72,36);
+const hemi=new THREE.HemisphereLight(0xe5f3ff,0x66705f,1.75);scene.add(hemi);const sun=new THREE.DirectionalLight(0xffefcf,1.9);sun.position.set(-25,35,20);scene.add(sun);
+const mats={road:new THREE.MeshStandardMaterial({color:0x7b7f7d,roughness:1}),paver:new THREE.MeshBasicMaterial({color:0xffffff,vertexColors:true}),bad:new THREE.MeshStandardMaterial({color:0x747875,roughness:.95}),dark:new THREE.MeshStandardMaterial({color:0x4a4c4b,roughness:1}),dirt:new THREE.MeshStandardMaterial({color:0x8a6849,roughness:1}),sand:new THREE.MeshStandardMaterial({color:0x9b8b72,roughness:1}),grass:new THREE.MeshStandardMaterial({color:0x4f743f,roughness:1}),wall:new THREE.MeshStandardMaterial({color:0xbfc1bd,roughness:.95}),roof:new THREE.MeshStandardMaterial({color:0x555b5d,roughness:.9}),metal:new THREE.MeshStandardMaterial({color:0x4c5357,metalness:.4,roughness:.5}),white:new THREE.MeshStandardMaterial({color:0xe5e7e5}),yellow:new THREE.MeshStandardMaterial({color:0xd0a72c})};
+const world=new THREE.Group(),roadGroup=new THREE.Group(),detailGroup=new THREE.Group();scene.add(world);world.add(roadGroup,detailGroup);
+const levels=[
+{id:1,title:'Inspección de hundimientos',short:'Hundimientos',objective:'Cruza la vía deteriorada durante 20 segundos sin caer.',time:20,type:'sink',consequence:'La depresión del pavimento altera el nivel de apoyo del peatón y puede provocar una pérdida de estabilidad en el recorrido.',improve:'Nivelar la base, corregir la depresión y reinstalar los adoquines con una superficie uniforme.'},
+{id:2,title:'Zona de huecos',short:'Huecos',objective:'Atraviesa la zona con huecos durante 25 segundos.',time:25,type:'hole',consequence:'Los espacios sin adoquines generan obstáculos y cambios bruscos de apoyo que pueden interrumpir el paso.',improve:'Retirar material suelto, recuperar la base y reponer los adoquines faltantes, verificando nivelación y compactación.'},
+{id:3,title:'Adoquines levantados',short:'Adoquines',objective:'Recorre 30 segundos evitando piezas levantadas y desplazadas.',time:30,type:'raised',consequence:'Las piezas levantadas forman obstáculos y desniveles que aumentan la dificultad del tránsito peatonal.',improve:'Reacomodar las piezas, corregir la base y asegurar juntas y nivelación uniformes.'},
+{id:4,title:'Lluvia y superficie irregular',short:'Lluvia',objective:'Llega al final en 25 segundos sin perder el control.',time:25,type:'rain',consequence:'La combinación simulada de humedad y superficie irregular dificulta identificar y superar los defectos del pavimento.',improve:'Mantener drenajes, corregir deformaciones y conservar una superficie continua para reducir puntos de acumulación de agua.'},
+{id:5,title:'Recorrido con obstáculos',short:'Desniveles',objective:'Cruza 3 sectores con desniveles durante 30 segundos.',time:30,type:'step',consequence:'Los cambios de altura obligan a modificar bruscamente la zancada y pueden producir tropiezos en el escenario simulado.',improve:'Corregir diferencias de altura y recuperar una transición continua entre los sectores del pavimento.'},
+{id:6,title:'Ruta de mantenimiento',short:'Mantenimiento',objective:'Recorre 35 segundos e inspecciona toda la vía antes de llegar al final.',time:35,type:'mixed',consequence:'Cuando varios deterioros se mantienen simultáneamente, el recorrido acumula diferentes puntos problemáticos.',improve:'Programar inspecciones, atender deterioros tempranos y conservar juntas, base y nivelación del pavimento.'},
+{id:7,title:'Antes y después',short:'Comparación',objective:'Recorre una sola vía y reconoce tres deterioros consecutivos durante 35 segundos.',time:35,type:'compare',consequence:'La misma vía presenta tres condiciones consecutivas: hundimiento, huecos y adoquines levantados, seguidas de una zona uniforme.',improve:'Usar mantenimiento correctivo y preventivo para recuperar la regularidad superficial del pavimento.'},
+{id:8,title:'Reto final: Guardia Occidental',short:'Reto final',objective:'Completa 45 segundos atravesando varios deterioros y termina en la zona mejorada.',time:45,type:'final',consequence:'El escenario reúne diferentes fallas para demostrar cómo varios defectos pueden coexistir en una misma vía.',improve:'Realizar diagnóstico, priorizar daños, intervenir la base y adoquines y establecer mantenimiento periódico.'}
+];
+let level=0,keys={},yaw=Math.PI,pitch=0,playing=false,elapsed=0,last=performance.now(),hazards=[],rain=null,score=0,walkDistance=0,verticalVel=0,grounded=true,insideHouse=false,inventory=[],equippedItem=null,doorGroup=null,doorOpen=false,repairTarget=null,repairing=false,repairProgress=0,repaired=new Set(),repairFx=[],repairAnimGroup=null,houseGroup=null,kitObject=null;
+const menu=document.getElementById('menu'),game=document.getElementById('game'),result=document.getElementById('result');
+function ensureRepairAnimGroup(){if(!repairAnimGroup){repairAnimGroup=new THREE.Group();scene.add(repairAnimGroup)}}
+function clearRepairAnim(){if(!repairAnimGroup)return;while(repairAnimGroup.children.length){const o=repairAnimGroup.children.pop();if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}for(const c of (o.children||[])){if(c.geometry)c.geometry.dispose();if(c.material)c.material.dispose();}}repairFx=[]}
+function addBox(g,x,y,z,w,h,d,mat,rot=0){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.rotation.y=rot;g.add(m);return m}
+function clear(g){while(g.children.length){const o=g.children.pop();if(o.geometry)o.geometry.dispose();if(o.material)o.material.dispose()}}
+function getDamageCenters(type){
+  const a=[];
+  if(type==='sink'||type==='rain'||type==='final'||type==='mixed') a.push(...[[-4.3,-8,1.75],[-1.2,-14,1.95],[3.4,-21,1.7],[-2.8,-27,1.9],[1.2,-34,1.8],[-3.5,-41,1.75],[2.8,-48,1.9],[-.8,-55,1.7]]);
+  if(type==='hole'||type==='final'||type==='mixed') a.push(...[[-2.9,-11,1.65],[2.8,-17,1.8],[-.9,-24,1.65],[3.1,-31,1.75],[-3.4,-38,1.7],[1.1,-45,1.8],[-2.4,-52,1.7]]);
+  if(type==='raised'||type==='final'||type==='mixed') a.push(...[[2.5,-9,1.6],[-2.4,-16,1.7],[3.6,-23,1.6],[-1.2,-30,1.7],[2.0,-37,1.65],[-3.2,-44,1.7],[1.0,-51,1.65],[-2.8,-57,1.6]]);
+  if(type==='step'||type==='mixed'||type==='final') a.push(...[[0,-12,1.9],[-.8,-20,1.85],[.9,-28,1.9],[-.5,-36,1.85],[1.2,-44,1.9],[-1.0,-52,1.85]]);
+  if(type==='compare') a.push(...[[-3,-10,1.8],[2.5,-18,1.65],[-2.3,-27,1.7],[2.8,-36,1.7],[-2,-45,1.65],[1.8,-53,1.7]]);
+  return a;
+}
+function hazardTypeFor(type,x,z){
+  if(type==='sink'||type==='rain') return 'sink';
+  if(type==='hole') return 'hole';
+  if(type==='raised') return 'raised';
+  if(type==='step') return 'step';
+  if(type==='compare') return z>-20?'sink':(z>-36?'hole':'raised');
+  if(type==='mixed') return z>-28?'raised':(z>-47?'sink':'hole');
+  if(type==='final') return z>-20?'sink':(z>-39?'hole':'raised');
+  return 'pavimento';
+}
+function isRepairedZone(x,z,extra=0){
+  for(const h of hazards){if(!h.repaired)continue;if(Math.hypot(x-h.x,z-h.z)<h.r+extra)return true;}
+  return false;
+}
+function instPavers(rows,z0,z1,type){
+  const roadW=13.0, px=.72, pz=.36, gap=.055;
+  const cols=Math.floor((roadW+gap)/(px+gap));
+  const rowStep=pz+gap;
+  const rowCount=Math.ceil((z0-z1)/rowStep)+1;
+  const geo=new THREE.BoxGeometry(px,.105,pz);
+  // Four explicit materials instead of vertex colors. This avoids the dark/black
+  // instance-color problem and keeps the reference pattern visible in every light.
+  const palette=[
+    new THREE.MeshStandardMaterial({color:0x8d9290,roughness:.9}),
+    new THREE.MeshStandardMaterial({color:0xcfd1cc,roughness:.86}),
+    new THREE.MeshStandardMaterial({color:0x666b6a,roughness:.9}),
+    new THREE.MeshStandardMaterial({color:0xe8e8df,roughness:.82})
+  ];
+  const meshes=palette.map(mat=>new THREE.InstancedMesh(geo,mat,rowCount*cols));
+  meshes.forEach(m=>{m.castShadow=false;m.receiveShadow=false;roadGroup.add(m)});
+  const dummy=new THREE.Object3D();
+  const centers=[];
+  let counts=[0,0,0,0];
+  const damageCenters=getDamageCenters(type);
+  const getDamage=(x,z)=>{for(const [cx,cz,rad] of damageCenters){const dx=x-cx,dz=z-cz,d=Math.hypot(dx,dz);if(d<rad)return{cx,cz,rad,d};}return null;};
+  // Hide unused instances at a safe off-world position.
+  meshes.forEach(m=>{for(let i=0;i<rowCount*cols;i++){dummy.position.set(0,-50,0);dummy.scale.set(.001,.001,.001);dummy.rotation.set(0,0,0);dummy.updateMatrix();m.setMatrixAt(i,dummy.matrix)}});
+  for(let r=0;r<rowCount;r++){
+    const z=z0-r*rowStep;
+    if(z<z1-.5) continue;
+    const stagger=(r%2)*((px+gap)/2);
+    for(let c=0;c<cols;c++){
+      let x=-roadW/2+(c+.5)*(px+gap)-stagger;
+      if(x<-roadW/2+px/2)x+=px+gap;
+      if(x>roadW/2-px/2)x-=px+gap;
+      const dmg=getDamage(x,z); let y=.065, ry=0, visible=true;
+      if(isRepairedZone(x,z,.12)) {
+        // Repaired area receives normal-height pavers again.
+        visible=true;
+      } else if(dmg){
+        const d=dmg.d/dmg.rad;
+        if(type==='sink'||(type==='mixed'&&dmg.cz<=-28&&dmg.cz>=-47)||(type==='final'&&dmg.cz>-20)){
+          const dep=(1-d)*(1-d)*.62; y=.065-dep; ry+=(x-dmg.cx)*.055*(1-d);
+        }
+        if(type==='hole'||(type==='mixed'&&dmg.cz<=-47)||(type==='final'&&dmg.cz<=-20&&dmg.cz>-39)){
+          if(d<.66) visible=false;
+          else { y=.065; ry+=(x-dmg.cx)*.02*(1-d); }
+        }
+        if(type==='raised'||(type==='mixed'&&dmg.cz>-28&&dmg.cz<=-10)||(type==='final'&&dmg.cz<=-39)){
+          const lift=.10+.42*(1-d); y=.065+lift; ry+=((c%2)?-.16:.16)*(1-d*.5);
+        }
+        if(type==='step'){ y=.065+.28*(1-d); ry+=((c%2)?-.08:.08)*(1-d); }
+        if(type==='compare'){
+          if(dmg.cz>-20){y=.065-(1-d)*(1-d)*.48;ry+=(x-dmg.cx)*.045*(1-d);}
+          else if(dmg.cz>-36){if(d<.70)visible=false;}
+          else {y=.065+.30*(1-d);ry+=((c%2)?-.18:.18)*(1-d);}
+        }
+      }
+      if(!visible) continue;
+      // Stable 4-piece repeating pattern: gray, light, charcoal-gray, white.
+      const pattern=(c+(r%2))%4;
+      const m=meshes[pattern],idx=counts[pattern]++;
+      dummy.position.set(x,y,z);dummy.rotation.set(0,ry,0);dummy.scale.set(1,1,1);dummy.updateMatrix();m.setMatrixAt(idx,dummy.matrix);
+    }
+  }
+  meshes.forEach(m=>m.instanceMatrix.needsUpdate=true);
+  return damageCenters;
+}
+function buildHouseInterior(){
+  if(houseGroup) return;
+  houseGroup=new THREE.Group();scene.add(houseGroup);houseGroup.visible=false;
+  const floorMat=new THREE.MeshStandardMaterial({color:0x777a78,roughness:.95});
+  const intWall=new THREE.MeshStandardMaterial({color:0xd7d3c8,roughness:.9});
+  const wood=new THREE.MeshStandardMaterial({color:0x76553b,roughness:.85});
+  addBox(houseGroup,0,-.03,0,6,.12,6,floorMat);
+  addBox(houseGroup,0,2.8,-3,6,5.6,.15,intWall);addBox(houseGroup,-3,2.8,0,.15,5.6,6,intWall);addBox(houseGroup,3,2.8,0,.15,5.6,6,intWall);addBox(houseGroup,0,2.8,3,6,5.6,.15,intWall);
+  addBox(houseGroup,-1.6,.85,-.4,2.6,.12,1.3,wood);addBox(houseGroup,-2.5,.42,-.4,.12,.8,1.1,wood);addBox(houseGroup,-.7,.42,-.4,.12,.8,1.1,wood);
+  for(let z=-1.8;z<=1.8;z+=.9) addBox(houseGroup,2.55,1.4,z,.35,2.3,.45,wood);
+  for(let z=-1.5;z<=1.5;z+=.75) addBox(houseGroup,2.25,1.0,z,.7,.08,.45,mats.metal);
+  kitObject=new THREE.Group();
+  addBox(kitObject,0,0,0,1.0,.38,.55,new THREE.MeshStandardMaterial({color:0xd5a62d,roughness:.7}));
+  addBox(kitObject,0,.25,0,.38,.08,.16,mats.metal);
+  kitObject.position.set(0,1.05,-.4);houseGroup.add(kitObject);
+  const label=document.createElement('canvas');label.width=256;label.height=80;const ctx=label.getContext('2d');ctx.fillStyle='#101820';ctx.fillRect(0,0,256,80);ctx.fillStyle='#f2cf62';ctx.font='bold 25px Arial';ctx.textAlign='center';ctx.fillText('KIT MANTENIMIENTO',128,48);const tex=new THREE.CanvasTexture(label);const sign=new THREE.Mesh(new THREE.PlaneGeometry(2.5,.78),new THREE.MeshBasicMaterial({map:tex}));sign.position.set(0,2.15,-2.9);houseGroup.add(sign);
+}
+function enterHouse(){insideHouse=true;houseGroup.visible=true;camera.position.set(0,1.72,.8);yaw=Math.PI;pitch=0;document.getElementById('center').textContent='Casa de mantenimiento · busca el kit';}
+function exitHouse(){insideHouse=false;houseGroup.visible=false;camera.position.set(-6.7,1.72,26);yaw=Math.PI/2;pitch=0;document.getElementById('center').textContent='Saliste de la casa';}
+function hasKit(){return inventory.includes('Kit de mantenimiento')}
+function addInventoryItem(name){if(!inventory.includes(name))inventory.push(name);document.getElementById('inventoryList').textContent=inventory.join(' · ')||'Vacío';}
+function equipKit(){if(!hasKit())return;equippedItem=equippedItem==='Kit de mantenimiento'?null:'Kit de mantenimiento';document.getElementById('equipText').textContent=equippedItem?'1 · Kit equipado':'1 · Equipar kit';document.getElementById('heldKit').style.display=equippedItem?'block':'none';}
+function updatePrompt(){const el=document.getElementById('prompt');if(!playing){el.classList.add('hidden');return;}let txt='';if(insideHouse){if(kitObject&&kitObject.visible&&!hasKit())txt='E · Recoger kit de mantenimiento';else txt='E · Salir de la casa';}else{const doorDx=camera.position.x+7.8,doorDz=camera.position.z-26;if(doorDx*doorDx+doorDz*doorDz<5.5)txt='E · Entrar a la casa';if(!hasKit() && txt==='')txt='Primero entra a la casa y recoge el kit';const h=getNearestHazard();if(h&&equippedItem==='Kit de mantenimiento')txt='F (mantener) · Reparar '+h.type; else if(h&&hasKit())txt='1 · Equipar kit para reparar';}
+if(repairing)txt='🔧 Reparando...';if(txt){el.textContent=txt;el.classList.remove('hidden')}else el.classList.add('hidden');}
+function getNearestHazard(){let best=null,bd=3.2;for(const h of hazards){if(h.repaired)continue;const dx=camera.position.x-h.x,dz=camera.position.z-h.z,d=Math.hypot(dx,dz);if(d<bd){bd=d;best=h}}return best;}
+function spawnRepairFx(h){ensureRepairAnimGroup();const g=new THREE.Group();repairAnimGroup.add(g);const ring=new THREE.Mesh(new THREE.TorusGeometry(h.r*.85,.06,10,40),new THREE.MeshBasicMaterial({color:0x73e3a0,transparent:true,opacity:.9}));ring.rotation.x=-Math.PI/2;ring.position.set(h.x,.12,h.z);g.add(ring);const bits=[];for(let i=0;i<14;i++){const m=new THREE.Mesh(new THREE.BoxGeometry(.08,.04,.08),new THREE.MeshBasicMaterial({color:i%2?0xd8d8cf:0x9b6e48}));m.position.set(h.x+(Math.random()-.5)*h.r*1.5,.12,h.z+(Math.random()-.5)*h.r*1.5);g.add(m);bits.push(m)}
+  // A set of replacement pavers rises from above the damaged area and settles into place.
+  const tiles=[];const tileMat=[new THREE.MeshStandardMaterial({color:0x8d9290,roughness:.9}),new THREE.MeshStandardMaterial({color:0xcfd1cc,roughness:.86}),new THREE.MeshStandardMaterial({color:0x666b6a,roughness:.9}),new THREE.MeshStandardMaterial({color:0xe8e8df,roughness:.82})];
+  const step=.55;let n=0;for(let x=-h.r;x<=h.r;x+=step){for(let z=-h.r;z<=h.r;z+=step){if(x*x+z*z>h.r*h.r*.88)continue;const m=new THREE.Mesh(new THREE.BoxGeometry(.48,.12,.32),tileMat[n++%tileMat.length]);const tx=h.x+x,tz=h.z+z;const startY=.72+Math.random()*.28;m.position.set(tx+(.25-Math.random()*.5),startY,tz+(.25-Math.random()*.5));m.rotation.y=(Math.random()-.5)*.35;g.add(m);tiles.push({m,tx,tz,startY,delay:Math.random()*.45,ox:(Math.random()-.5)*.5,oz:(Math.random()-.5)*.5,spin:(Math.random()-.5)*1.2});}}
+  repairFx.push({g,ring,bits,tiles,t:0});}
+function finishRepair(h){
+  h.repaired=true;
+  repaired.add(h.id);
+  repairing=false;
+  repairTarget=null;
+  repairProgress=0;
+  score+=50;
+  document.getElementById('score').textContent=score;
+  document.getElementById('repairCount').textContent=hazards.filter(h=>h.repaired).length+' / '+hazards.length;
+  // Rebuild only the pavement representation. The repaired defect is omitted from
+  // the defect visuals and its pavers return to normal height, so the damaged area
+  // visually becomes regular pavement again.
+  buildRoad(levels[level].type);
+  document.getElementById('center').textContent='✓ Pavimento reparado';
+  setTimeout(()=>{if(playing)document.getElementById('center').textContent='';},900);
+}
+
+function startRepair(h){if(repairing||!hasKit())return;clearRepairAnim();repairing=true;repairTarget=h;repairProgress=0;spawnRepairFx(h);}
+function animateRepair(dt){if(!repairing||!repairTarget)return;const duration=1.8;repairProgress=Math.min(1,repairProgress+dt/duration);const remaining=Math.max(0,duration*(1-repairProgress));document.getElementById('prompt').innerHTML='🔧 Reparando...<div class="repairtimer">'+remaining.toFixed(1)+' s</div><div class="repairbar"><div class="repairfill" style="width:'+Math.round(repairProgress*100)+'%"></div></div>';if(repairProgress>=1)finishRepair(repairTarget);}
+function makeBuilding(x,z,side){addBox(world,x,2.1,z,5.5,4.2,5.5,mats.wall);addBox(world,x,4.35,z,5.9,.45,5.9,mats.roof);for(let zz=z-1.3;zz<=z+1.3;zz+=2.6){addBox(world,x+side*2.79,2.1,zz,.08,1.25,1.15,mats.dark);addBox(world,x+side*2.82,1.05,zz+0.9,.12,2.1,1.15,mats.roof);}}
+function buildMaintenanceDoor(){if(doorGroup)return;doorGroup=new THREE.Group();world.add(doorGroup);const frame=new THREE.MeshStandardMaterial({color:0x5a3b2b,roughness:.85});const doorMat=new THREE.MeshStandardMaterial({color:0x6f472f,roughness:.8});addBox(doorGroup,-7.82,1.65,26,.18,3.3,2.05,frame);addBox(doorGroup,-7.70,1.45,26,.10,2.9,1.55,doorMat);addBox(doorGroup,-7.63,1.45,25.98,.08,.18,.18,mats.metal);doorGroup.userData.closedX=-7.70;doorGroup.userData.openX=-7.45;}
+function toggleDoor(){if(!doorGroup)return;doorOpen=!doorOpen;doorGroup.children[1].position.x=doorOpen?doorGroup.userData.openX:doorGroup.userData.closedX;}
+function makeTree(x,z){addBox(world,x,.9,z,.16,1.8,.16,mats.metal);const c=new THREE.Mesh(new THREE.SphereGeometry(1.25,10,8),mats.grass);c.position.set(x,2.1,z);world.add(c)}
+function makeStreet(){
+  addBox(world,0,-.30,-9,15.4,.55,98,new THREE.MeshStandardMaterial({color:0x8d918c,roughness:1}));
+  // Neutral gray base visible only inside defects, matching the real concrete/granular support layer.
+  mats.road.color.set(0x7b7f7d);
+  // Sidewalks and curbs, like a real institutional residential street.
+  addBox(world,-7.15,.02,-9,1.45,.18,98,mats.white);addBox(world,7.15,.02,-9,1.45,.18,98,mats.white);
+  addBox(world,-6.45,.18,-9,.28,.36,98,mats.white);addBox(world,6.45,.18,-9,.28,.36,98,mats.white);
+  // No painted center line: the reference street is entirely paved with interlocking blocks.
+  for(let z=34;z>-55;z-=8){makeBuilding(-10.6,z,-1);makeBuilding(10.6,z+3,1)}
+  for(let z=31;z>-53;z-=7){makeTree(-8.0,z);makeTree(8.0,z+2.5)}
+}
+function addSoilPatch(x,y,z,r,rot=0){
+  const soilMat=new THREE.MeshStandardMaterial({color:0x86684d,roughness:1});
+  const m=new THREE.Mesh(new THREE.CircleGeometry(r,28),soilMat);
+  m.position.set(x,y,z);m.rotation.set(-Math.PI/2,0,rot);detailGroup.add(m);
+  const pebbleMats=[new THREE.MeshStandardMaterial({color:0x5f5549,roughness:1}),new THREE.MeshStandardMaterial({color:0x9b8a70,roughness:1}),new THREE.MeshStandardMaterial({color:0x6e6255,roughness:1})];
+  const pebbleGeo=new THREE.DodecahedronGeometry(.065,0);
+  const count=Math.min(42,Math.max(12,Math.floor(r*r*18)));
+  for(let i=0;i<count;i++){
+    const a=Math.random()*Math.PI*2,rr=Math.sqrt(Math.random())*r*.88;
+    const peb=new THREE.Mesh(pebbleGeo,pebbleMats[i%pebbleMats.length]);
+    peb.scale.set(1.5,.45,.8);peb.position.set(x+Math.cos(a)*rr,y+.035,z+Math.sin(a)*rr);peb.rotation.y=Math.random()*Math.PI;detailGroup.add(peb);
+  }
+  return m;
+}
+function addDamageVisuals(type,centers){
+  const unique=[];const seen=new Set();for(const [x,z,r] of centers){const key=x.toFixed(1)+'|'+z.toFixed(1);if(!seen.has(key)){seen.add(key);unique.push([x,z,r]);}}
+  for(const [x,z,r] of unique){
+    if(isRepairedZone(x,z,.15)) continue;
+    const isSink=type==='sink'||type==='rain'||(type==='mixed'&&z<=-28&&z>-47)||(type==='final'&&z>-20)||(type==='compare'&&z>-20);
+    const isHole=type==='hole'||(type==='mixed'&&z<=-47)||(type==='final'&&z<=-20&&z>-39)||(type==='compare'&&z<=-20&&z>-36);
+    const isRaised=type==='raised'||(type==='mixed'&&z>-28&&z<=-10)||(type==='final'&&z<=-39)||(type==='compare'&&z<=-36);
+    if(isSink){
+      addSoilPatch(x,-.06,z,r*1.02,.08);
+      const rim=new THREE.Mesh(new THREE.TorusGeometry(r*1.0,.035,8,32),new THREE.MeshStandardMaterial({color:0x5e5145,roughness:1}));
+      rim.rotation.x=-Math.PI/2;rim.position.set(x,-.015,z);detailGroup.add(rim);
+    }
+    if(isHole){
+      addSoilPatch(x,-.035,z,r*1.02,.12);
+      const edge=new THREE.Mesh(new THREE.RingGeometry(r*.70,r*1.04,28),new THREE.MeshStandardMaterial({color:0x514a42,roughness:1,side:THREE.DoubleSide}));
+      edge.rotation.x=-Math.PI/2;edge.position.set(x,-.005,z);detailGroup.add(edge);
+      for(let q=0;q<7;q++){
+        const a=Math.random()*Math.PI*2,rr=r*(.72+Math.random()*.28);
+        addBox(detailGroup,x+Math.cos(a)*rr,.025,z+Math.sin(a)*rr,.10,.055,.20,mats.paver,Math.random()*Math.PI);
+      }
+    }
+    if(isRaised){
+      addSoilPatch(x,.012,z,r*.95,.05);
+      for(let q=0;q<7;q++){
+        const a=Math.random()*Math.PI*2,rr=r*(.58+Math.random()*.38);
+        addBox(detailGroup,x+Math.cos(a)*rr,.11+Math.random()*.08,z+Math.sin(a)*rr,.10,.045,.22,mats.dirt,Math.random()*Math.PI);
+      }
+    }
+  }
+}
+function buildRoad(type){
+  clear(roadGroup);clear(detailGroup);repairFx=[];hazards=[];
+  makeStreet();
+  const centers=getDamageCenters(type);
+  let hid=0;
+  const addHaz=(x,z,r,t)=>hazards.push({id:hid++,x,z,r,type:t,repaired:repaired.has(hid-1)});
+  for(const [x,z,r] of centers) addHaz(x,z,r,hazardTypeFor(type,x,z));
+  const madeCenters=instPavers(38,36,-58,type);
+  addDamageVisuals(type,madeCenters);
+  if(type==='rain'||type==='final')rain=createRain();
+}
+
+function addSign(txt,x,y,z,color){const c=document.createElement('canvas');c.width=512;c.height=100;const ctx=c.getContext('2d');ctx.fillStyle='rgba(8,14,19,.88)';ctx.fillRect(0,0,512,100);ctx.fillStyle=color;ctx.font='bold 34px Arial';ctx.textAlign='center';ctx.fillText(txt,256,62);const tex=new THREE.CanvasTexture(c);const m=new THREE.Mesh(new THREE.PlaneGeometry(4.8,.95),new THREE.MeshBasicMaterial({map:tex,transparent:true}));m.position.set(x,y,z);m.rotation.y=Math.PI;detailGroup.add(m)}
+function createRain(){const n=700,pos=new Float32Array(n*3);for(let i=0;i<n;i++){pos[i*3]=(Math.random()-.5)*28;pos[i*3+1]=Math.random()*16;pos[i*3+2]=Math.random()*95-45}const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.BufferAttribute(pos,3));const mat=new THREE.PointsMaterial({color:0xcde9ff,size:.045,transparent:true,opacity:.6});const p=new THREE.Points(geo,mat);scene.add(p);return p}
+function updateRepairFx(dt){for(let i=repairFx.length-1;i>=0;i--){const fx=repairFx[i];fx.t+=dt;const p=Math.min(1,fx.t/1.8);fx.ring.scale.setScalar(.55+p*1.35);fx.ring.material.opacity=1-p;for(let j=0;j<fx.bits.length;j++){const b=fx.bits[j];b.position.y+=dt*(.45+.05*j);b.rotation.x+=dt*3;b.rotation.z+=dt*2;}for(const tile of fx.tiles||[]){const q=Math.max(0,Math.min(1,(fx.t-tile.delay)/.72));const ease=q*q*(3-2*q);tile.m.position.x=tile.tx+tile.ox*(1-ease);tile.m.position.z=tile.tz+tile.oz*(1-ease);tile.m.position.y=tile.startY+(0.11-tile.startY)*ease;tile.m.rotation.y*=.94;if(q>=1){tile.m.position.x=tile.tx;tile.m.position.z=tile.tz;tile.m.position.y=.11;tile.m.rotation.y=0;}}if(p>=1){repairAnimGroup.remove(fx.g);repairFx.splice(i,1)}}}
+function setupLevel(i){level=i;clearRepairAnim();const d=levels[i];repaired.clear();inventory=[];equippedItem=null;document.getElementById('inventoryList').textContent='Vacío';document.getElementById('equipText').textContent='1 · Equipar kit';document.getElementById('heldKit').style.display='none';insideHouse=false;doorOpen=false;if(houseGroup)houseGroup.visible=false;if(kitObject)kitObject.visible=true;document.getElementById('levelTitle').textContent='Nivel '+(i+1)+' · '+d.title;document.getElementById('levelSub').textContent=d.short;document.getElementById('objective').textContent=d.objective;elapsed=0;walkDistance=0;score=0;yaw=Math.PI;pitch=0;camera.position.set(0,1.72,36);if(rain){scene.remove(rain);rain=null}buildRoad(d.type);buildMaintenanceDoor();document.getElementById('repairCount').textContent='0 / '+hazards.length;document.getElementById('fill').style.width='0%';document.getElementById('center').textContent='Haz clic en JUGAR para comenzar';playing=false;}
+function renderLevels(){const box=document.getElementById('levels');box.innerHTML='';levels.forEach((d,i)=>{const b=document.createElement('button');b.className='level';b.innerHTML='<div class="n">NIVEL '+(i+1)+'</div><h3>'+d.short+'</h3><small>'+d.objective+'</small>';b.addEventListener('click',()=>startLevel(i));box.appendChild(b)})}
+function startLevel(i){menu.classList.add('hidden');result.classList.add('hidden');game.classList.remove('hidden');setupLevel(i);playing=true;canvas.requestPointerLock?.();document.getElementById('center').textContent='¡Empieza!';setTimeout(()=>{if(playing)document.getElementById('center').textContent='';},1200)}
+function fail(h){playing=false;document.exitPointerLock?.();const d=levels[level];document.getElementById('resultIcon').textContent='⚠️';document.getElementById('resultTitle').textContent='Nivel no superado';document.getElementById('resultIntro').textContent='Se activó una caída simulada en el escenario de '+d.short.toLowerCase()+'.';document.getElementById('consequence').textContent=d.consequence;document.getElementById('improvement').textContent=d.improve;result.classList.remove('hidden')}
+function win(){playing=false;document.exitPointerLock?.();score+=100;document.getElementById('resultIcon').textContent='✅';document.getElementById('resultTitle').textContent='Nivel superado';document.getElementById('resultIntro').textContent='Completaste el objetivo reparando todos los deterioros de la vía.';document.getElementById('consequence').textContent='En este escenario simulado no se produjo el evento de caída durante el objetivo.';document.getElementById('improvement').textContent=levels[level].improve;result.classList.remove('hidden')}
+document.getElementById('retry').addEventListener('click',()=>startLevel(level));document.getElementById('choose').addEventListener('click',()=>{result.classList.add('hidden');game.classList.add('hidden');menu.classList.remove('hidden');});
+window.addEventListener('keydown',e=>{const k=e.key.toLowerCase();keys[k]=true;if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','shift',' ','e','f','i','1'].includes(k))e.preventDefault();if(k==='i'&&playing){document.querySelector('.inventory').classList.toggle('hidden');return;}if(k==='1'&&playing){equipKit();return;}if(k==='e'&&playing){if(insideHouse){if(kitObject&&kitObject.visible&&!hasKit()){kitObject.visible=false;addInventoryItem('Kit de mantenimiento');equippedItem='Kit de mantenimiento';document.getElementById('equipText').textContent='1 · Kit equipado';document.getElementById('heldKit').style.display='block';document.getElementById('center').textContent='✓ Kit recogido y equipado';setTimeout(()=>{if(playing)document.getElementById('center').textContent='';},900)}else exitHouse();}else{const doorDx=camera.position.x+7.8,doorDz=camera.position.z-26;if(doorDx*doorDx+doorDz*doorDz<5.5){toggleDoor();if(doorOpen)enterHouse();}}}});window.addEventListener('keyup',e=>keys[e.key.toLowerCase()]=false);
+canvas.addEventListener('click',()=>{if(!playing){playing=true;canvas.requestPointerLock?.();document.getElementById('center').textContent='';}else canvas.requestPointerLock?.()});
+document.addEventListener('mousemove',e=>{if(document.pointerLockElement!==canvas||!playing)return;yaw-=e.movementX*.0021;pitch-=e.movementY*.0017;pitch=Math.max(-1.3,Math.min(1.3,pitch))});
+function update(dt){
+ if(!playing)return;const d=levels[level];
+ if(insideHouse){
+   const f=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw)),r=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));let mv=new THREE.Vector3();
+   if(keys.w||keys.arrowup)mv.add(f);if(keys.s||keys.arrowdown)mv.sub(f);if(keys.d||keys.arrowright)mv.add(r);if(keys.a||keys.arrowleft)mv.sub(r);
+   if(mv.lengthSq()){mv.normalize();mv.multiplyScalar(4.2*dt);camera.position.add(mv)}
+   if(keys[' ']&&grounded){verticalVel=5.0;grounded=false;keys[' ']=false}verticalVel-=13.5*dt;camera.position.y+=verticalVel*dt;if(camera.position.y<=1.72){camera.position.y=1.72;verticalVel=0;grounded=true}
+   camera.position.x=Math.max(-2.5,Math.min(2.5,camera.position.x));camera.position.z=Math.max(-2.5,Math.min(2.5,camera.position.z));
+   camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;
+   updatePrompt();return;
+ }
+ const f=new THREE.Vector3(-Math.sin(yaw),0,-Math.cos(yaw)),r=new THREE.Vector3(Math.cos(yaw),0,-Math.sin(yaw));let mv=new THREE.Vector3();
+ if(keys.w||keys.arrowup)mv.add(f);if(keys.s||keys.arrowdown)mv.sub(f);if(keys.d||keys.arrowright)mv.add(r);if(keys.a||keys.arrowleft)mv.sub(r);
+ if(mv.lengthSq()){mv.normalize();const sprint=keys.shift?2.05:1;mv.multiplyScalar(5.0*sprint*dt);camera.position.add(mv);walkDistance+=mv.length()}
+ if(keys[' ']&&grounded){verticalVel=5.4;grounded=false;keys[' ']=false}
+ verticalVel-=13.5*dt;camera.position.y+=verticalVel*dt;if(camera.position.y<=1.72){camera.position.y=1.72;verticalVel=0;grounded=true}
+ camera.position.x=Math.max(-6.7,Math.min(6.7,camera.position.x));camera.position.z=Math.max(-57.2,Math.min(37,camera.position.z));
+ camera.rotation.order='YXZ';camera.rotation.y=yaw;camera.rotation.x=pitch;
+ document.getElementById('repairCount').textContent=hazards.filter(h=>h.repaired).length+' / '+hazards.length;document.getElementById('fill').style.width=(hazards.length?hazards.filter(h=>h.repaired).length/hazards.length*100:0)+'%';
+ const near=getNearestHazard();
+ if(near&&equippedItem==='Kit de mantenimiento'&&keys.f){startRepair(near)}
+ if(repairing&&repairTarget){const dd=Math.hypot(camera.position.x-repairTarget.x,camera.position.z-repairTarget.z);if(dd>2.7||!keys.f){repairing=false;repairTarget=null;repairProgress=0;clearRepairAnim()}}
+ animateRepair(dt);
+ for(const h of hazards){if(h.repaired)continue;const dx=camera.position.x-h.x,dz=camera.position.z-h.z;const centerHitRadius=Math.min(.78,Math.max(.52,h.r*.42));if(dx*dx+dz*dz<centerHitRadius*centerHitRadius){fail(h);return}}
+ if(hazards.length&&hazards.every(h=>h.repaired)){win();return}
+ updatePrompt();
+}
+function animate(now){const dt=Math.min(.045,(now-last)/1000);last=now;update(dt);updateRepairFx(dt);if(rain&&playing){const a=rain.geometry.attributes.position.array;for(let i=1;i<a.length;i+=3){a[i]-=18*dt;if(a[i]<0)a[i]=15+Math.random()*4}rain.geometry.attributes.position.needsUpdate=true}renderer.render(scene,camera);requestAnimationFrame(animate)}
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}addEventListener('resize',resize);resize();buildHouseInterior();buildMaintenanceDoor();renderLevels();setupLevel(0);requestAnimationFrame(animate);
+})();
+</script>
+</body></html>
